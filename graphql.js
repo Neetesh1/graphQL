@@ -39,16 +39,29 @@ const typeDefs = `
     body: String!
   }
 
+  type Post {
+    userId: ID!
+    id: ID!
+    title: String!
+    body: String!
+    user: User
+  }
+
   type Query {
     users: [User!]!
     user(id: ID!): User
     comments: [Comment!]!
     comment(id: ID!): Comment
+    posts: [Post!]!
+    post(id: ID!): Post
   }
 
   type Mutation {
     updateComment(id: ID!, name: String, email: String, body: String): Comment
     deleteComment(id: ID!): Boolean
+    addPost(userId: ID!, title: String!, body: String!): Post
+    updatePost(id: ID!, title: String, body: String): Post
+    deletePost(id: ID!): Boolean
   }
 `;
 
@@ -98,6 +111,41 @@ const resolvers = {
         throw new Error(`Failed to fetch comment with id ${id}`);
       }
     },
+    posts: async () => {
+      try {
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts"
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+        throw new Error("Failed to fetch posts");
+      }
+    },
+    post: async (_, { id }) => {
+      try {
+        const response = await axios.get(
+          `https://jsonplaceholder.typicode.com/posts/${id}`
+        );
+        return response.data;
+      } catch (error) {
+        console.error(`Error fetching post with id ${id}:`, error);
+        throw new Error(`Failed to fetch post with id ${id}`);
+      }
+    },
+  },
+  Post: {
+    user: async (parent) => {
+      try {
+        const response = await axios.get(
+          `https://jsonplaceholder.typicode.com/users/${parent.userId}`
+        );
+        return response.data;
+      } catch (error) {
+        console.error(`Error fetching user for post with userId ${parent.userId}:`, error);
+        return null;
+      }
+    }
   },
   Mutation: {
     updateComment: async (_, { id, name, email, body }) => {
@@ -118,6 +166,39 @@ const resolvers = {
         return true;
       } catch (error) {
         console.error(`Error deleting comment with id ${id}:`, error);
+        return false;
+      }
+    },
+    addPost: async (_, { userId, title, body }) => {
+      try {
+        const response = await axios.post(
+          "https://jsonplaceholder.typicode.com/posts",
+          { userId, title, body }
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error adding post:", error);
+        throw new Error("Failed to add post");
+      }
+    },
+    updatePost: async (_, { id, title, body }) => {
+      try {
+        const response = await axios.put(
+          `https://jsonplaceholder.typicode.com/posts/${id}`,
+          { title, body }
+        );
+        return response.data;
+      } catch (error) {
+        console.error(`Error updating post with id ${id}:`, error);
+        throw new Error(`Failed to update post with id ${id}`);
+      }
+    },
+    deletePost: async (_, { id }) => {
+      try {
+        await axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`);
+        return true;
+      } catch (error) {
+        console.error(`Error deleting post with id ${id}:`, error);
         return false;
       }
     }

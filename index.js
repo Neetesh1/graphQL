@@ -29,10 +29,13 @@ async function startServer() {
         <li><strong>Get user by ID:</strong> query { user(id: "1") { id name email } }</li>
         <li><strong>Get all comments:</strong> query { comments { id name body } }</li>
         <li><strong>Get comment by ID:</strong> query { comment(id: "1") { id name body } }</li>
-        <li><strong>Update comment:</strong> mutation { updateComment(id: "1", name: "Updated Name", email: "updated  
-        body: "Updated body") }</li>
+        <li><strong>Get all posts:</strong> query { posts { id title body user { name } } }</li>
+        <li><strong>Get post by ID:</strong> query { post(id: "1") { id title body user { name } } }</li>
+        <li><strong>Add post:</strong> mutation { addPost(userId: "1", title: "New Post", body: "Post body") { id title body userId } }</li>
+        <li><strong>Update post:</strong> mutation { updatePost(id: "1", title: "Updated Title", body: "Updated body") { id title body userId } }</li>
+        <li><strong>Delete post:</strong> mutation { deletePost(id: "1") }</li>
+        <li><strong>Update comment:</strong> mutation { updateComment(id: "1", name: "Updated Name", email: "updated@email.com", body: "Updated body") { id name email body } }</li>
         <li><strong>Delete comment:</strong> mutation { deleteComment(id: "1") }</li>
-        
       </ul>
     `);
   });

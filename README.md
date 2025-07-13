@@ -79,6 +79,65 @@ mutation {
 }
 ```
 
+**Get all posts:**
+```graphql
+query {
+  posts {
+    id
+    title
+    body
+    user {
+      name
+    }
+  }
+}
+```
+
+**Get post by ID:**
+```graphql
+query {
+  post(id: "1") {
+    id
+    title
+    body
+    user {
+      name
+    }
+  }
+}
+```
+
+**Add a post:**
+```graphql
+mutation {
+  addPost(userId: "1", title: "New Post", body: "Post body") {
+    id
+    title
+    body
+    userId
+  }
+}
+```
+
+**Update a post:**
+```graphql
+mutation {
+  updatePost(id: "1", title: "Updated Title", body: "Updated body") {
+    id
+    title
+    body
+    userId
+  }
+}
+```
+
+**Delete a post:**
+```graphql
+mutation {
+  deletePost(id: "1")
+}
+```
+
 ## Deployment
 
 This project is ready to deploy on [Vercel](https://vercel.com/). See `vercel.json` for configuration.
