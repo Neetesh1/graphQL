@@ -1,5 +1,7 @@
 const axios = require("axios");
 
+const BASE_URL = "https://jsonplaceholder.typicode.com";
+
 const typeDefs = `
   type User {
     id: ID!
@@ -70,7 +72,7 @@ const resolvers = {
     users: async () => {
       try {
         const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/users"
+          `${BASE_URL}/users`
         );
         return response.data;
       } catch (error) {
@@ -81,7 +83,7 @@ const resolvers = {
     user: async (_, { id }) => {
       try {
         const response = await axios.get(
-          `https://jsonplaceholder.typicode.com/users/${id}`
+          `${BASE_URL}/users/${id}`
         );
         return response.data;
       } catch (error) {
@@ -92,7 +94,7 @@ const resolvers = {
     comments: async () => {
       try {
         const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/comments"
+          `${BASE_URL}/comments`
         );
         return response.data;
       } catch (error) {
@@ -103,7 +105,7 @@ const resolvers = {
     comment: async (_, { id }) => {
       try {
         const response = await axios.get(
-          `https://jsonplaceholder.typicode.com/comments/${id}`
+          `${BASE_URL}/comments/${id}`
         );
         return response.data;
       } catch (error) {
@@ -114,7 +116,7 @@ const resolvers = {
     posts: async () => {
       try {
         const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts"
+          `${BASE_URL}/posts`
         );
         return response.data;
       } catch (error) {
@@ -125,7 +127,7 @@ const resolvers = {
     post: async (_, { id }) => {
       try {
         const response = await axios.get(
-          `https://jsonplaceholder.typicode.com/posts/${id}`
+          `${BASE_URL}/posts/${id}`
         );
         return response.data;
       } catch (error) {
@@ -138,7 +140,7 @@ const resolvers = {
     user: async (parent) => {
       try {
         const response = await axios.get(
-          `https://jsonplaceholder.typicode.com/users/${parent.userId}`
+          `${BASE_URL}/users/${parent.userId}`
         );
         return response.data;
       } catch (error) {
@@ -148,31 +150,10 @@ const resolvers = {
     }
   },
   Mutation: {
-    updateComment: async (_, { id, name, email, body }) => {
-      try {
-        const response = await axios.put(
-          `https://jsonplaceholder.typicode.com/comments/${id}`,
-          { name, email, body }
-        );
-        return response.data;
-      } catch (error) {
-        console.error(`Error updating comment with id ${id}:`, error);
-        throw new Error(`Failed to update comment with id ${id}`);
-      }
-    },
-    deleteComment: async (_, { id }) => {
-      try {
-        await axios.delete(`https://jsonplaceholder.typicode.com/comments/${id}`);
-        return true;
-      } catch (error) {
-        console.error(`Error deleting comment with id ${id}:`, error);
-        return false;
-      }
-    },
     addPost: async (_, { userId, title, body }) => {
       try {
         const response = await axios.post(
-          "https://jsonplaceholder.typicode.com/posts",
+          `${BASE_URL}/posts`,
           { userId, title, body }
         );
         return response.data;
@@ -184,7 +165,7 @@ const resolvers = {
     updatePost: async (_, { id, title, body }) => {
       try {
         const response = await axios.put(
-          `https://jsonplaceholder.typicode.com/posts/${id}`,
+          `${BASE_URL}/posts/${id}`,
           { title, body }
         );
         return response.data;
@@ -195,10 +176,31 @@ const resolvers = {
     },
     deletePost: async (_, { id }) => {
       try {
-        await axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`);
+        await axios.delete(`${BASE_URL}/posts/${id}`);
         return true;
       } catch (error) {
         console.error(`Error deleting post with id ${id}:`, error);
+        return false;
+      }
+    },
+    updateComment: async (_, { id, name, email, body }) => {
+      try {
+        const response = await axios.put(
+          `${BASE_URL}/comments/${id}`,
+          { name, email, body }
+        );
+        return response.data;
+      } catch (error) {
+        console.error(`Error updating comment with id ${id}:`, error);
+        throw new Error(`Failed to update comment with id ${id}`);
+      }
+    },
+    deleteComment: async (_, { id }) => {
+      try {
+        await axios.delete(`${BASE_URL}/comments/${id}`);
+        return true;
+      } catch (error) {
+        console.error(`Error deleting comment with id ${id}:`, error);
         return false;
       }
     }
