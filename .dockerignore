@@ -1,1 +1,9 @@
 node_modules
+varcel.json
+README.md
+Dockerfile
+docker-compose.yml
+.env
+.git
+.gitignore
+npm-debug.log
